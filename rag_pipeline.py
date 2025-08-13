@@ -3,8 +3,7 @@ from retriever import retrieve_context
 import os
 
 
-# You are an expert in B2Scala code generation. Your task is to generate valid B2Scala code from a structured protocol draft.
-# Use the following examples and documentation as a guide to ensure correct syntax and patterns.
+
     
 def load_structured_draft(file_path):
     """
@@ -18,18 +17,22 @@ def generate_b2scala_code(draft, context):
     Uses the local Ollama LLM to generate B2Scala code based on the draft and retrieved context.
     """
     prompt = f"""
-    
-    ---
-    Documentation & Examples:
-    {context}
-    ---
-    
-    Protocol Draft:
-    {draft}
-    ---
-    You a sofware engineer specialized in c++ code generation.
-    Generate the c++ code for this protocol draft. The code should be fully functional and ready to be compiled.
-    """
+            You are a code generation assistant specialized in translating structured protocol drafts into valid B2Scala code.
+            Use the following retrieved examples and the draft to produce a B2Scala implementation. Provide only the source code file contents
+            and include a short header comment with the draft title and which KB examples were used.
+
+            --- DRAFT ---
+            {draft}
+
+            --- RETRIEVED EXAMPLES (short summaries) ---
+            {context}
+
+            --- INSTRUCTIONS ---
+            - Generate valid B2Scala code using the Bach primitives (tell, get, ask, nask, etc).
+            - Keep code concise, with comments showing message flow.
+            - If some draft assumptions are missing, keep TODO comments.
+            - Output only the Scala code (no extra explanation).
+            """
     
     print("Sending prompt to local LLM for code generation...")
     try:
@@ -65,3 +68,7 @@ if __name__ == "__main__":
         print("\n--- Generated B2Scala Code ---")
         print(generated_code)
         print(f"\nCode saved to {output_file}")
+
+
+
+
