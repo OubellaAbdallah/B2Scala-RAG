@@ -1,0 +1,78 @@
+tion, session key generation, and ticket encryption. Subsequently, communication
+with party B ensues, facilitated by the transmission of the encrypted ticket, along
+with nonces to ensure freshness. Parties exchange messages encrypted with the
+session key and incorporate nonces to prevent replay attacks. Mutual authen-
+tication is achieved through encrypted messages exchanged between A and B,
+leveraging the established session key and nonces. Despite its early contributions,
+the original protocol exhibited vulnerabilities, notably the reflection attack. In
+response, refined versions have emerged, such as the Needham-Schroeder-Lowe
+[16] and Otway-Rees protocols [13].
+The description of the Needham-Schroeder public key protocol is often slimmed
+down to the three following actions:
+Alice−→Bob:message (na:a)pkb
+Bob−→Alice :message (na:nb)pka
+Alice−→Bob:message (nb)pkb
+where each transition of the form X→Y:mrepresents message mbeing sent
+---
+tion, session key generation, and ticket encryption. Subsequently, communication
+with party B ensues, facilitated by the transmission of the encrypted ticket, along
+with nonces to ensure freshness. Parties exchange messages encrypted with the
+session key and incorporate nonces to prevent replay attacks. Mutual authen-
+tication is achieved through encrypted messages exchanged between A and B,
+leveraging the established session key and nonces. Despite its early contributions,
+the original protocol exhibited vulnerabilities, notably the reflection attack. In
+response, refined versions have emerged, such as the Needham-Schroeder-Lowe
+[16] and Otway-Rees protocols [13].
+The description of the Needham-Schroeder public key protocol is often slimmed
+down to the three following actions:
+Alice−→Bob:message (na:a)pkb
+Bob−→Alice :message (na:nb)pka
+Alice−→Bob:message (nb)pkb
+where each transition of the form X→Y:mrepresents message mbeing sent
+---
+tion, session key generation, and ticket encryption. Subsequently, communication
+with party B ensues, facilitated by the transmission of the encrypted ticket, along
+with nonces to ensure freshness. Parties exchange messages encrypted with the
+session key and incorporate nonces to prevent replay attacks. Mutual authen-
+tication is achieved through encrypted messages exchanged between A and B,
+leveraging the established session key and nonces. Despite its early contributions,
+the original protocol exhibited vulnerabilities, notably the reflection attack. In
+response, refined versions have emerged, such as the Needham-Schroeder-Lowe
+[16] and Otway-Rees protocols [13].
+The description of the Needham-Schroeder public key protocol is often slimmed
+down to the three following actions:
+Alice−→Bob:message (na:a)pkb
+Bob−→Alice :message (na:nb)pka
+Alice−→Bob:message (nb)pkb
+where each transition of the form X→Y:mrepresents message mbeing sent
+---
+cally referred to as the principal entities, facilitating encrypted communication
+to safeguard data confidentiality and integrity. The protocol unfolds in a series of
+steps: initialization, where a client (A) requests access to another client (B) from
+a trusted server (S), followed by the server’s response, which involves authentica-
+tion, session key generation, and ticket encryption. Subsequently, communication
+with party B ensues, facilitated by the transmission of the encrypted ticket, along
+with nonces to ensure freshness. Parties exchange messages encrypted with the
+session key and incorporate nonces to prevent replay attacks. Mutual authen-
+tication is achieved through encrypted messages exchanged between A and B,
+leveraging the established session key and nonces. Despite its early contributions,
+the original protocol exhibited vulnerabilities, notably the reflection attack. In
+response, refined versions have emerged, such as the Needham-Schroeder-Lowe
+---
+val pkb = Token ( pkb )
+val na  = Token ( na  )
+val nb  = Token ( nb  )
+Encrypted messages are coded by the following si-terms:
+1
+2case class encrypt2( n: SI_Term, k: SI_Term ) extends SI_Term
+case class encrypt3( n: SI_Term, x: SI_Term, k: SI_Term ) extends SI_Term
+1.2. Agents
+The fundamental concept for programming agents involves utilizing constructs in the form of:
+1val P = Agent { (tell( f( 1, 2 ) ) + tell( g( 3 ) ) ) || (tell( a ) + tell( b ) ) }
+To integrate a Bach agent within Scala definitions, the key component is the Agent object. This object is defined with an
+apply method, as shown below:
+1object Agent { def apply(agent: BSC_Agent) = CalledAgent(() => agent) }
+This object consists of a function that maps a BSC_Agent into the Scala structure CalledAgent. The latter takes a thunk, a
+function with no arguments that returns an agent. This lazy evaluation approach is essential for handling recursively
+defined agents.
+---
