@@ -1,62 +1,59 @@
 ```scala
-// Simple Key Exchange protocol in B2Scala
-// Based on KB examples: Needham-Schroeder public key protocol, Otway-Rees protocols
+// Simple Key Exchange protocol implementation in B2Scala
 
-import scala.collection.mutable
+// Header comment
+/*
+ * Draft: Simple Key Exchange
+ * Examples used: Needham-Schroeder public key protocol
+ */
 
-object Client extends Agent {
-  // Initial message to Server with nonceC
-  def tellInitialMessage = tell(ClientHello(nonceC))
+import b2scala._
 
-  // Expected messages from Server
-  var expectedMessagesFromServer = mutable.Set.empty[SI_Term]
+object SimpleKeyExchange {
+  // Client and Server agents
+  val client = Agent("client")
+  val server = Agent("server")
 
-  // Process received messages from Server
-  def processReceivedMessages: SI_Term = {
-    for (msg <- expectedMessagesFromServer) {
-      msg match {
-        case ServerHello(nonceS, cert) =>
-          val sessionKey = encrypt3(nonceC, nonceS, cert)
-          tell(Finished(encrypt2(sessionKey)))
-        case _ => // TODO handle invalid messages
-      }
+  // Nonce generation (TODO: implement secure nonce generation)
+  def generateNonce(agent: Agent): String = TODO
+
+  // Message 1: Client -> Server: ClientHello(nonceC)
+  def clientHello(clientNonce: String): Tell = {
+    tell(client, server) { msg =>
+      msg << "ClientHello" << "nonceC" << clientNonce
     }
   }
 
-  // Agent definition with initial message and processing of received messages
-  def apply: BSC_Agent = {
-    Agent { (tellInitialMessage || processReceivedMessages) }
-  }
-}
-
-object Server extends Agent {
-  // Expected initial message from Client
-  var expectedInitialMessageFromClient = mutable.Set.empty[SI_Term]
-
-  // Process received initial message from Client and generate response
-  def processReceivedInitialMessage: SI_Term = {
-    val msg = expectedInitialMessageFromClient.head
-    msg match {
-      case ClientHello(nonceC) =>
-        val nonceS = Token(nonceS)
-        val cert = Token(cert)
-        tell(ServerHello(nonceS, cert))
+  // Message 2: Server -> Client: ServerHello(nonceS, cert)
+  def serverHello(serverNonce: String, cert: String): Tell = {
+    tell(server, client) { msg =>
+      msg << "ServerHello" << "nonceS" << serverNonce << "cert" << cert
     }
   }
 
-  // Agent definition with processing of received initial message and generation of response
-  def apply: BSC_Agent = {
-    Agent { (processReceivedInitialMessage) }
+  // Message 3: Client -> Server: Finished(MAC)
+  def finished(mac: String): Tell = {
+    tell(client, server) { msg =>
+      msg << "Finished" << "MAC" << mac
+    }
+  }
+
+  // Session key establishment (TODO: implement secure session key generation)
+  def establishSessionKey(): Ask = TODO
+
+  def main(args: Array[String]): Unit = {
+    val clientNonce = generateNonce(client)
+    val serverNonce = generateNonce(server)
+    val cert = "server's certificate" // TODO: implement secure certificate management
+    val mac = "encrypted message authentication code" // TODO: implement secure MAC generation
+
+    clientHello(clientNonce)
+    serverHello(serverNonce, cert)
+    finished(mac)
+
+    val sessionKey = establishSessionKey()
   }
 }
-
-// Define protocol messages as Scala classes
-case class ClientHello(nonceC: SI_Term) extends SI_Term
-case class ServerHello(nonceS: SI_Term, cert: SI_Term) extends SI_Term
-case class Finished(mac: SI_Term) extends SI_Term
-
-// Utility functions for encryption and token generation
-def encrypt2(n: SI_Term, k: SI_Term): SI_Term = // implementation not shown
-def encrypt3(n: SI_Term, x: SI_Term, k: SI_Term): SI_Term = // implementation not shown
-def Token(x: Any): SI_Term = // implementation not shown
 ```
+
+Note that some parts of the implementation are marked as `TODO`, indicating areas where further work is needed to fully implement the protocol.

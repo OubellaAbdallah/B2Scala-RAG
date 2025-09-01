@@ -12,7 +12,7 @@ from langchain_community.llms import Ollama
 LLM_MODEL = "llama3.1"
 
 class RAGPipeline:
-    def __init__(self, k=5):
+    def __init__(self, k=3):
         try:
             # Assumes Retriever class and the required Ollama models are available
             self.retriever = Retriever(k=k)
@@ -32,10 +32,11 @@ class RAGPipeline:
 
         # Step 2: Build prompt
         prompt = f"""
-        You are a code generation assistant specialized in translating structured protocol drafts into valid B2Scala code.
+        You are a code generation assistant specialized in translating structured protocol drafts into valid and full B2Scala code.
         Use the following retrieved examples and the draft to produce a B2Scala implementation. Provide only the source code file contents
         and include a short header comment with the draft title and which KB examples were used.
-
+        The code should contain all necessary imports and be ready to compile. Do not use any undefined variables or methods.
+        Do not add any extra syntax or imports that are not strictly necessary or they are not part of the B2Scala library.
         --- DRAFT ---
         {draft}
 
