@@ -6,7 +6,7 @@ import sys
 LLM_MODEL = "llama3.1"
 
 class RAGPipeline:
-    def __init__(self, k=5):
+    def __init__(self, k=3):
         self.retriever = Retriever(k=k)
         self.llm = Ollama(model=LLM_MODEL)
     

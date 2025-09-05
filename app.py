@@ -32,23 +32,51 @@ class RAGPipeline:
 
         # Step 2: Build prompt
         prompt = f"""
-        You are a code generation assistant specialized in translating structured protocol drafts into valid and full B2Scala code.
-        Use the following retrieved examples and the draft to produce a B2Scala implementation. Provide only the source code file contents
-        and include a short header comment with the draft title and which KB examples were used.
-        The code should contain all necessary imports and be ready to compile. Do not use any undefined variables or methods.
-        Do not add any extra syntax or imports that are not strictly necessary or they are not part of the B2Scala library.
-        --- DRAFT ---
+        You are an expert in protocol modeling and B2Scala.
+        You have access to a Knowledge Base which contains canonical, working B2Scala examples.
+        One canonical example in the Knowledge Base is the QUIC v1 handshake file that uses the exact
+        package, imports, object structure, DATA / AGENTS / FORMULA & EXEC sections, and B2Scala primitives
+        shown below. Use that example as the authoritative template and style guide.
+
+        Your tasks (MANDATORY):
+        1) Read the given protocol draft (variable `draft` below) and the Knowledge Base context (variable `context_text`).
+        2) Summarize the draft internally (agents, messages, goals, assumptions) and then produce a single output:
+        - Exactly one Scala source file, and nothing else (no extra prose).
+        - The Scala file MUST follow the package, imports, object name, and structural layout shown in the canonical example.
+        - All tokens, case classes, agents, messages and formulas MUST be adapted from the draft but preserve the canonical coding style.
+        3) If any detail in the draft is missing, make reasonable assumptions and document them with inline // comments in the Scala file.
+        4) Ensure the Scala file is self-contained (all needed case classes and Tokens declared) and is syntactically consistent with the canonical QUIC example from the Knowledge Base.
+        5) Do NOT output anything outside the Scala file. The entire assistant response must be the file contents only.
+
+        RESTRICTIONS (must obey):
+        - Use **exactly** this package and imports header at the top of the file:
+        package bscala.bsc_program
+
+        import bscala.bsc_data._
+        import bscala.bsc_agent._
+        import bscala.bsc_runner._
+        import bscala.bsc_settings._
+        import bscala.bsc_formula._
+
+        - Follow the canonical section headings and layout: DATA, AGENTS, FORMULA & EXEC as in the example.
+        - Preserve naming style: Tokens named with quotes like Token("Name"), SI_Term case classes, Agent scripts using tell/get/ask composition, and final execution via new BSC_Runner_BHM().execute(Protocol, F).
+        - Produce case classes for all structured terms you need (messages, crypto, envelopes, events, etc.).
+        - All assumptions must be inline commented with // and briefly justified.
+        - Output must be a compilable B2Scala program using core primitives only (no external libraries beyond the imports above).
+
+        VERY IMPORTANT OUTPUT RULE:
+        - The assistant MUST output a single Scala file only, using the object name `BSC_modelling_<ProtocolNameNoSpaces>` where <ProtocolNameNoSpaces> is derived from the draft title (remove spaces, punctuation).
+        - Include a one-line doc comment right after the imports briefly describing the protocol.
+
+        Input variables available:
+        - draft: the protocol draft text (use to extract agents, messages, goals, assumptions).
         {draft}
-
-        --- RETRIEVED EXAMPLES (short summaries) ---
+        - context_text: Knowledge Base context (contains canonical B2Scala examples you MUST follow).
         {context_text}
-
-        --- INSTRUCTIONS ---
-        - Generate valid B2Scala code using the Bach primitives (tell, get, ask, nask, etc).
-        - Keep code concise, with comments showing message flow.
-        - If some draft assumptions are missing, keep TODO comments.
-        - Output only the Scala code (no extra explanation).
+        Now produce the Scala file ONLY, using the canonical QUIC example style from the Knowledge Base as the template and adapting tokens/messages/agents from the draft. Ensure all missing details are commented with // assumptions.
         """
+
+
 
         # Step 3: Call LLM
         st.info("🔹 Generating answer with LLM...")
