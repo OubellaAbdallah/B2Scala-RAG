@@ -120,7 +120,15 @@ if prompt := st.chat_input("Enter your protocol draft here..."):
             answer, context = rag_pipeline.generate_answer(prompt)
         
         if answer:
+            output_file = os.path.join("Generated", "generated_code.scala")
             # Display the generated code
             st.code(answer, language="scala")
+            try:
+                os.makedirs("Generated", exist_ok=True)
+                with open(output_file, "w", encoding="utf-8") as f:
+                    f.write(answer)
+                print("Code generation successful. Check the 'Generated' directory.")
+            except Exception as e:
+                print(f"Failed to write generated code file: {e}", file=sys.stderr)
         else:
             st.warning("Could not generate code. Please check your Ollama server and model.")
