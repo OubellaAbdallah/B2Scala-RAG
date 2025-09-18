@@ -9,9 +9,11 @@ Zakaria Olamine
 
 # Supervisors:
 
-Hamza Moncif
+Mr. Hamza Moncif
 
-Doha Ouardi
+Mrs. Doha Ouardi
+
+Mr. Thierry Bertin Gardelle
 
 # Internship Organized by:
 
