@@ -5,8 +5,6 @@ Protocol Draft-to-B2Scala: Automatic Code Generation Using Local LLMs and Retrie
 
 Abdallah Oubella
 
-Zakaria Olamine
-
 # Supervisors:
 
 Mr. Hamza Moncif
