@@ -4,10 +4,9 @@
 # B2Scala-RAG
 Protocol Draft-to-B2Scala: Automatic Code Generation Using Local LLMs and Retrieval-Augmented Generation
 # Screens 
-<img width="1910" height="944" alt="app3" src="https://github.com/user-attachments/assets/94d38096-9bfe-4588-b6ca-18a15d295abe" />
-<img width="1920" height="1027" alt="app2" src="https://github.com/user-attachments/assets/4cebd97d-1905-43bf-a5d7-3274192295cf" />
 <img width="1920" height="1029" alt="app1" src="https://github.com/user-attachments/assets/cba7c87f-53aa-4c1f-8062-38d10db7f50a" />
-
+<img width="1920" height="1027" alt="app2" src="https://github.com/user-attachments/assets/4cebd97d-1905-43bf-a5d7-3274192295cf" />
+<img width="1910" height="944" alt="app3" src="https://github.com/user-attachments/assets/94d38096-9bfe-4588-b6ca-18a15d295abe" />
 # Developers:
 
 Abdallah Oubella
